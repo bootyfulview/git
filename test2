@@ -1,0 +1,20 @@
+import bs4
+import requests
+import pyodbc
+
+result = 'odbctest100'
+
+#Insert captured text into DB
+query = "INSERT INTO STUDYDAY VALUES('"+ result +"') commit"
+
+#Connect to DB
+connstring = 'DRIVER={ODBC Driver 18 for SQL Server};SERVER=rokazakitest.database.windows.net;DATABASE=testdb2;UID=rokazaki;PWD=rbcj0553@;Connection Timeout=30;'
+with pyodbc.connect(connstring) as conn:
+    with conn.cursor() as cursor:
+        cursor.execute(query)
+        
+#check if the connection is closed
+if conn.closed:
+    print('The connection is closed')
+else:
+    print('The connection is open')

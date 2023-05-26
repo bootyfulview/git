@@ -1,0 +1,21 @@
+import bs4
+import requests
+import pyodbc
+
+
+#Get text from target website
+url = 'https://rokazakiapp.azurewebsites.net/'
+res = requests.get(url)
+soup = bs4.BeautifulSoup(res.text, "html.parser")
+result = soup.h2.string
+
+#Connect to DB
+connstring = 'DRIVER={ODBC Driver 18 for SQL Server};SERVER=rokazakifailover.database.windows.net;DATABASE=testdb;UID=rokazaki;PWD=rbcj0553@;Connection Timeout=30;'
+conn = pyodbc.connect(connstring)
+
+#Insert captured text into DB
+query = "INSERT INTO STUDYDAY VALUES('"+ result +"') commit"
+conn.execute(query)
+
+#Connection close
+conn.close()
